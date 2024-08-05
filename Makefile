@@ -5,23 +5,12 @@ build:
 
 run:
 	docker run -it \
+		--name $(CONTAINER_NAME) \
 		--privileged \
-		--runtime=nvidia \
-		--env=DISPLAY=$(DISPLAY) \
-		--volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-		--env="QT_X11_NO_MITSHM=1" \
+		--gpus=all \
 		--rm \
-		-v "/$(pwd)/video:/video" \
-		-v /etc/group:/etc/group:ro \
-		-v /etc/passwd:/etc/passwd:ro \
-		-v /etc/localtime:/etc/localtime:ro \
-		-v /media:/media \
-		-v /dev:/dev \
-		--net host \
+		-v "./video:/video" \
 		$(CONTAINER_NAME)
-
-deface: run
-	deface $(INPUT)
 
 stop:
 	docker stop $(CONTAINER_NAME)
